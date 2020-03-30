@@ -1,0 +1,104 @@
+﻿<Window x:Class="ImageDeformater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageDeformater"
+        mc:Ignorable="d"
+        Title="ImageDeformater" Height="800" Width="1400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+
+        <!--左边，显示原图、效果图-->
+
+        <Image Name="OriginalImg" MouseDown="GetImgPixelInfo_MouseDown" HorizontalAlignment="Left" Height="400" Margin="25,230,0,0" VerticalAlignment="Top" Width="400"/>
+        <Image Name="ChangedImg" HorizontalAlignment="Left" Height="400" Margin="450,230,0,0" VerticalAlignment="Top" Width="400"/>
+        <Image Name="TPSControlImg" MouseDown="GetImgPixelInfo_MouseDown" HorizontalAlignment="Left" Height="160" Margin="360,50,0,0" VerticalAlignment="Top" Width="160"/>
+
+        <Label Content="当前点坐标:(向下X正向，向右Y正向)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,680,0,0"/>
+        <TextBox Name="PosInfoTbx" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,700,0,0" IsReadOnly="True" BorderThickness="0,0,0,0"/>
+        <!--右边参数调整栏目-->
+
+        <Rectangle Grid.Column="1" Fill="#607D8B" HorizontalAlignment="Left" Height="700" Margin="0,0,0,0" Stroke="#607D8B" VerticalAlignment="Center" Width="1"/>
+
+        <Rectangle Grid.Column="1" Fill="#607D8B" HorizontalAlignment="Center" Height="1" Margin="0,150,0,0" Stroke="#607D8B" VerticalAlignment="Top" Width="400"/>
+        <Label Content="扭曲变形" FontSize="16" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        
+        <Label Content="最大旋转角" Grid.Column="1" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="RotateMaxAngleText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="90,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        <Label Content="旋转半径" Grid.Column="1" HorizontalAlignment="Left" Margin="240,50,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="RotateRadiusText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="320,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        <Label Content="旋转中心X" Grid.Column="1" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="RotateCenterXText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="90,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        <Label Content="旋转中心Y" Grid.Column="1" HorizontalAlignment="Left" Margin="240,100,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="RotateCenterYText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="320,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+
+        <Rectangle Grid.Column="1" Fill="#607D8B" HorizontalAlignment="Center" Height="1" Margin="0,300,0,0" Stroke="#607D8B" VerticalAlignment="Top" Width="400"/>
+        <Label Content="图像畸变" FontSize="16" Grid.Column="1" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top"/>
+
+        <CheckBox Name="DistortIsPillowDistortCbx" Grid.Column="1" Content="校正枕形失真" HorizontalAlignment="Left" Margin="15,210,0,0" VerticalAlignment="Top" IsChecked="True"/>
+
+        <Label Content="畸变球半径" Grid.Column="1" HorizontalAlignment="Left" Margin="240,210,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="DistortRadiusText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="320,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        <Label Content="球心X" Grid.Column="1" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="DistortCenterXText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="90,250,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        <Label Content="球心Y" Grid.Column="1" HorizontalAlignment="Left" Margin="240,250,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="DistortCenterYText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="320,250,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        
+        <Rectangle Grid.Column="1" Fill="#607D8B" HorizontalAlignment="Center" Height="1" Margin="0,450,0,0" Stroke="#607D8B" VerticalAlignment="Top" Width="400"/>
+        <Label Content="TPS" FontSize="16" Grid.Column="1" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top"/>
+
+        <Button Name="ControlOpenBtn" Click="ControlOpenBtn_Click" Content="打开控制点图像" Grid.Column="1" HorizontalAlignment="Left" Margin="15,340,0,0" VerticalAlignment="Top" Width="120" Height="40"/>
+        
+        <ListView Name="PointPairList" Grid.Column="1" HorizontalAlignment="Left" Height="120" Margin="220,315,0,0" VerticalAlignment="Top" Width="220">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="52" Header="x'" DisplayMemberBinding="{Binding targetX}"/>
+                    <GridViewColumn Width="52" Header="y'" DisplayMemberBinding="{Binding targetY}"/>
+                    <GridViewColumn Width="52" Header="x" DisplayMemberBinding="{Binding controlX}"/>
+                    <GridViewColumn Width="52" Header="y" DisplayMemberBinding="{Binding controlY}"/>
+                </GridView>
+            </ListView.View>
+            <RadioButton Content="RadioButton" Height="100" Width="100"/>
+        </ListView>
+
+        <Button Name="TPSInsertNewBtn" Click="TPSInsertNewBtn_Click" Content="插入新点对" Grid.Column="1" HorizontalAlignment="Left" Margin="15,390,0,0" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="TPSNewPairText" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="15,420,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <CheckBox Name="TrimRdo" Content="裁剪黑边" Grid.Column="1" HorizontalAlignment="Left" Margin="140,424,0,0" VerticalAlignment="Top"/>
+
+        <Label Content="插值方法" Grid.Column="1" HorizontalAlignment="Left" Margin="10,470,0,0" VerticalAlignment="Top"/>
+        <ComboBox Name="InterpolationCmb" SelectedIndex="0" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="90,470,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="最近邻插值" />
+            <ComboBoxItem Content="双线性插值" />
+            <ComboBoxItem Content="双三次插值" />
+            <ComboBoxItem Content="快速双三次插值" />
+        </ComboBox>
+
+        <DockPanel Grid.Column="1" Width="420" HorizontalAlignment="Left" Margin="10,530,0,0" VerticalAlignment="Top">
+            <RadioButton Name="RotationRdo" Checked="MethodRdoGroup_Checked" GroupName="method" Content="扭曲变形                            " IsChecked="True"/>
+            <RadioButton Name="DistortRdo"  Checked="MethodRdoGroup_Checked" GroupName="method" Content="图像畸变                            " />
+            <RadioButton Name="TPSRdo"      Checked="MethodRdoGroup_Checked" GroupName="method" Content="TPS                    " />
+        </DockPanel>
+
+        <Button Name="OpenBtn" Click="OpenBtn_Click" Content="打开待处理图片" Grid.Column="1" HorizontalAlignment="Left" Margin="40,575,0,0" VerticalAlignment="Top" Width="120" Height="40"/>
+        <Button Name="SaveBtn" Click="SaveBtn_Click" Content="保存处理后图片" Grid.Column="1" HorizontalAlignment="Left" Margin="280,575,0,0" VerticalAlignment="Top" Width="120" Height="40"/>
+        <Button Name="RunBtn" Click="RunBtn_Click" Content="运行处理" Grid.Column="1" HorizontalAlignment="Left" Margin="40,630,0,0" VerticalAlignment="Top" Width="120" Height="40"/>
+        <Label Name ="pureRunTimeLbl" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="280,690,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="IsParallelCbx" IsChecked="False" Content="使用并行计算" Grid.Column="1" HorizontalAlignment="Left" Margin="280,640,0,0" VerticalAlignment="Top"/>
+        
+
+
+
+    </Grid>
+</Window>
